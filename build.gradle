@@ -1,0 +1,64 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'java'
+    id "org.hidetake.ssh" version "2.11.2"
+    id 'war'
+    id "com.heroku.sdk.heroku-gradle" version "3.0.0"
+}
+apply plugin: 'war'
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://oss.sonatype.org/content/repositories/releases/')
+    }
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2/')
+    }
+    mavenCentral()
+}
+dependencies {
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.3'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.jdbi:jdbi3-core:3.23.0'
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'javax.json:javax.json-api:1.1.4'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.13'
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'org.jdbi:jdbi3-core:3.23.0'
+    implementation 'javax.servlet:jstl:1.2'
+    implementation 'org.glassfish:javax.json:1.1.4'
+    implementation 'junit:junit:3.8.1'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.zaxxer:HikariCP:3.1.0'
+    implementation 'net.coobird:thumbnailator:0.4.13'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation'javax.websocket:javax.websocket-api:1.1'
+    implementation group: 'com.paypal.sdk', name: 'checkout-sdk', version: '1.0.2'
+    implementation group: 'com.paypal.sdk', name: 'paypal-core', version: '1.6.5'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+}
+tasks.withType(Test) {
+    systemProperty 'junit.jupiter.execution.parallel.enabled', true
+    jvmArgs '--add-opens', 'java.base/java.time=ALL-UNNAMED'
+}
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+description = 'AnimeWeb Maven Webapp'
+java.sourceCompatibility = JavaVersion.VERSION_11
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+apply plugin: 'org.hidetake.ssh'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+apply plugin: "com.heroku.sdk.heroku-gradle"
+targetCompatibility = JavaVersion.VERSION_11
